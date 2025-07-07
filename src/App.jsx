@@ -2,11 +2,12 @@ import { useState } from 'react'
 import './App.css'
 import { Stack, Typography, Button } from '@mui/material'
 import AddTaskModal from './components/AddTaskModal'
+import { mockData } from './mockData'
 import CardContainer from './components/CardContainer'
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
-  const [taskList, setTaskList] = useState([]);
+  const [taskList, setTaskList] = useState([...mockData]);
 
   {
     /** 
@@ -19,43 +20,12 @@ function App() {
   }
 
 
-  const mockData = [
-    {
 
-      title: "title",
-      description: 'desc',
-      tags: ['Launch'],
-      status: 'completed'
-    },
-    {
-
-      title: 'title',
-      description: 'desc',
-      tags: ['Launch'],
-      status: 'completed'
-    },
-    {
-
-      title: 'title',
-      description: 'desc',
-      tags: ['Launch'],
-      status: 'inProgress'
-    },
-    {
-
-      title: 'title',
-      description: 'desc',
-      tags: ['Launch'],
-      status: 'new'
-    }
-  ]
   const handleAddTask = (newTask) => {
-
     let a = [
       ...taskList,
       newTask
     ];
-
     setTaskList(a);
     setIsOpen(false)
 
@@ -74,11 +44,11 @@ function App() {
         </Stack>
       </Stack>
       <Stack>
-        <CardContainer cardsData={mockData} />
+        <CardContainer cardsData={taskList} />
 
         <AddTaskModal openModal={isOpen}
           handleClose={(prev) => setIsOpen(!prev)}
-          addTask={handleAddTask} />
+          addTask={(newTask) => handleAddTask(newTask)} />
 
       </Stack>
     </Stack>

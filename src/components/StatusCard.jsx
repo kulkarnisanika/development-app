@@ -7,11 +7,11 @@ const StatusCard = ({ status, cardData }) => {
     return (
         <Stack gap={2}>
             <Typography sx={{ fontSize: '2', color:'#3B373E'}}>{status}</Typography>
-            <Box sx={{ height: '606px', backgroundColor: '#C5C0C94D', borderRadius: 2, p:2 }}>
+            <Box sx={{ minHeight: '606px', backgroundColor: '#C5C0C94D', borderRadius: 2, p:2 }}>
                 <Stack gap={2} >
                     {
                         cardData?.map((item) => {
-                            return (<TaskCard  title={item?.title} description={item?.description} tag></TaskCard>)
+                            return (<TaskCard key={item?.id}  title={item?.title} description={item?.description} tag></TaskCard>)
                         })
                     }
                 </Stack>
