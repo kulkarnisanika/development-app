@@ -19,8 +19,6 @@ function App() {
      */
   }
 
-
-
   const handleAddTask = (newTask) => {
     let a = [
       ...taskList,
@@ -28,13 +26,11 @@ function App() {
     ];
     setTaskList(a);
     setIsOpen(false)
-
-
   }
 
   return (
     <Stack gap="58px">
-      <Stack direction='row' sx={{ dispaly: "flex", justifyContent: "space-between" }}>
+      <Stack direction='row' flexWrap='wrap' sx={{ dispaly: "flex", justifyContent: "space-between"  }}>
         <Stack  >
           <Typography variant="h4" sx={{ fontSize: '32px', fontWeight: 700 }}>Development Tasks</Typography>
           <Typography variant='body1' color='text.secondary'>A board to keep track of development progress.</Typography>
