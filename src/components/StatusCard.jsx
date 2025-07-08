@@ -1,19 +1,11 @@
-import { Box, Card, Stack, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
 import TaskCard from './TaskCard';
+import { statusMap } from '../utils/constants'; 
 
-const StatusCard = ({ status, cardData, handleOnDragStart,handleOnDrop, setDraggedItem }) => {
-
-   
-    const statusMap = {
-        new: 'Not Started',
-        inProgress: 'In Progress',
-        completed: 'Completed'
-    }
-   
-    
+const StatusCard = ({ status, cardData,handleOnDrop, setDraggedItem }) => {
+  
     return (
-        <div onDrop={(handleOnDrop)}
+        <div onDrop={handleOnDrop}
             onDragOver={(e) => e.preventDefault()}>
             <Stack gap={2}>
                 <Typography sx={{ fontSize: '2', color: '#3B373E' }}>{statusMap[status]}</Typography>
@@ -29,7 +21,6 @@ const StatusCard = ({ status, cardData, handleOnDragStart,handleOnDrop, setDragg
                                             sourceItem: item,
                                             sourceIndex: index
                                         })}
-                                        onDragOver={(e) => e.preventDefault()}
                                         style={{ cursor: "move" }}>
                                         <TaskCard title={item?.title} description={item?.description} tag></TaskCard>
                                     </div>

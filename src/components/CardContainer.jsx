@@ -1,58 +1,45 @@
 import { useState, useEffect, useMemo } from 'react'
 import StatusCard from './StatusCard'
-import { Box, Grid, Stack } from '@mui/material'
+import { Box, Grid } from '@mui/material'
+import { orderedStatuses } from '../utils/constants'
 
-const CardContainer = ({ cardsData = [] }) => {
 
-     /*
-    onDrop => columnName, index
-    to get that item - todoList[TargetColumnName][TargetIndex]
+const CardContainer = ({ cardsData = {}, setTaskList }) => {
 
-    source Item = clonedList[sourceColumn].splice(sourceIndex,1)
-    Add that = clonedList[targetColum].splice(targetIndex,0,sourceItem)
+    /*
+   onDrop => columnName, index
+   to get that item - todoList[TargetColumnName][TargetIndex]
 
-    */
-    const [formattedData, setFormattedData] = useState({})
+   source Item = clonedList[sourceColumn].splice(sourceIndex,1)
+   Add that = clonedList[targetColum].splice(targetIndex,0,sourceItem)
+
+   */
     const [draggedItem, setDraggedItem] = useState(null);
-    useEffect(() => {
-        const organizedData = cardsData?.reduce((acc, item) => {
-            const { status } = item;
-            if (!acc[status]) {
-                acc[status] = [item]
-            }
-            else {
-                acc[status] = [
-                    ...acc[status],
-                    item
-                ]
-            }
-            return acc;
-        }, {});
-        setFormattedData(organizedData);
-    }, [cardsData]);
-
-    const orderedStatuses = ['new', 'inProgress', 'completed'];
-
-    const handleOnDropItem = (targetColumn, targetIndex)  => {
-        const {sourceColumn, sourceItem, sourceIndex} = draggedItem
-        const targetItem = formattedData[targetColumn][targetIndex]
-        if(!sourceItem || (sourceItem === targetItem)) return;
+    const handleOnDropItem = (targetColumn, targetIndex) => {
+        const { sourceColumn, sourceItem, sourceIndex } = draggedItem
+        const targetItem = cardsData[targetColumn][targetIndex]
+        if (!sourceItem || (sourceItem === targetItem)) return;
 
         //code to drop
         //1. clone into another var
-        const clonnedItemList = formattedData;
+        const clonnedItemList = {
+            new: [...cardsData.new],
+            inProgress: [...cardsData.inProgress],
+            completed: [...cardsData.completed]
+        };
         //2. remove source item from source column
-       clonnedItemList[sourceColumn]?.splice(sourceIndex,1);
+        clonnedItemList[sourceColumn]?.splice(sourceIndex, 1);
         //3. Add draggedItem into target column at target index
-       clonnedItemList[targetColumn]?.splice(targetIndex,0,sourceItem);
+        clonnedItemList[targetColumn]?.splice(targetIndex, 0, sourceItem);
 
-        setDraggedItem(clonnedItemList)
+        setDraggedItem(null);
+        setTaskList(clonnedItemList);
     }
     return (
         <Box sx={{ width: '100vw' }}>
             <Grid container gap={3}>
-                {orderedStatuses.map((statusKey,index) => {
-                    const cards = formattedData[statusKey];
+                {orderedStatuses.map((statusKey, index) => {
+                    const cards = cardsData[statusKey];
                     if (!cards) return null;
                     return (
                         <Grid item key={statusKey} sx={{ flex: 1 }}>
@@ -61,12 +48,7 @@ const CardContainer = ({ cardsData = [] }) => {
                                     cardData={cards}
                                     status={statusKey}
                                     sx={{ flex: 1 }}
-                                    handleOnDragStart={(sourceIndex) => {
-                                        //code to set draggableItem
-                                    }}
-                                    handleOnDrop = {
-                                        () => handleOnDropItem(statusKey,index)
-                                    }
+                                    handleOnDrop={() => handleOnDropItem(statusKey, index)}
                                     setDraggedItem={setDraggedItem}
                                 />
                             </div>
